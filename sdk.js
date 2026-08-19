@@ -5,11 +5,14 @@ var YaGamesLoader;
 
     var e = {
         r: e => {
-            "undefined" != typeof Symbol &&
-                Symbol.toStringTag &&
+            if (
+                "undefined" != typeof Symbol &&
+                Symbol.toStringTag
+            ) {
                 Object.defineProperty(e, Symbol.toStringTag, {
                     value: "Module"
                 });
+            }
 
             Object.defineProperty(e, "__esModule", {
                 value: !0
@@ -41,16 +44,16 @@ var YaGamesLoader;
                     if (t < 1) {
                         var s = r(n);
 
-                        throw (
-                            o.message =
-                                "Loading chunk " +
-                                n +
-                                " failed after 3 retries.\n(" +
-                                s +
-                                ")",
-                            o.request = s,
-                            o
-                        );
+                        o.message =
+                            "Loading chunk " +
+                            n +
+                            " failed after 3 retries.\n(" +
+                            s +
+                            ")";
+
+                        o.request = s;
+
+                        throw o;
                     }
 
                     return new Promise(function (r) {
@@ -101,11 +104,24 @@ var YaGamesLoader;
         return e;
     };
 
-if (window.sdkLoaderWasInited) {
-    console.warn("The SDK Loader was loaded more than once");
-} else {
-    let e, r, o, n;
-    window.sdkLoaderWasInited = !0;
+    if (
+        window === window.top ||
+        window.sdkLoaderWasInited
+    ) {
+        const e = window.sdkLoaderWasInited
+            ? "The SDK Loader was loaded more than once"
+            : "SDK initialization outside of frame";
+
+        console.warn(e);
+
+    } else {
+
+        let e;
+        let r;
+        let o;
+        let n;
+
+        window.sdkLoaderWasInited = !0;
 
         let a = !1;
         let t = !1;
@@ -125,7 +141,9 @@ if (window.sdkLoaderWasInited) {
                         ? Promise.reject(f)
                         : n
                             ? (
-                                console.warn("YaGames was initialized"),
+                                console.warn(
+                                    "YaGames was initialized"
+                                ),
                                 n
                             )
                             : (
@@ -150,7 +168,8 @@ if (window.sdkLoaderWasInited) {
         };
 
         const c = (e, r = {}) => {
-            var o, n;
+            var o;
+            var n;
 
             window.parent.postMessage(
                 {
@@ -162,22 +181,23 @@ if (window.sdkLoaderWasInited) {
                     type: "error",
 
                     data: {
-                        block: "ErrorCounter/common: sdk-loader",
+                        block:
+                            "ErrorCounter/common: sdk-loader",
 
                         error: {
-                            message: `[SDK LOADER]: ${e}`
+                            message:
+                                `[SDK LOADER]: ${e}`
                         },
 
                         additional: i(
                             i(
-                                i(
-                                    {},
-                                    r
-                                ),
+                                i({}, r),
 
-                                (null == (o = r.error)
-                                    ? void 0
-                                    : o.message)
+                                (
+                                    null == (o = r.error)
+                                        ? void 0
+                                        : o.message
+                                )
                                     ? {
                                         originalMessage:
                                             null == (n = r.error)
@@ -189,7 +209,8 @@ if (window.sdkLoaderWasInited) {
 
                             r.source
                                 ? {
-                                    originalSource: r.source
+                                    originalSource:
+                                        r.source
                                 }
                                 : {}
                         ),
@@ -199,24 +220,30 @@ if (window.sdkLoaderWasInited) {
                         type: "error"
                     }
                 },
+
                 "*"
             );
         };
 
-        Object.defineProperty(window.YaGames, "deviceInfo", {
-            get: () => {
-                c(
-                    "accessing deviceInfo in YaGames"
-                );
+        Object.defineProperty(
+            window.YaGames,
+            "deviceInfo",
+            {
+                get: () => {
+                    c(
+                        "accessing deviceInfo in YaGames"
+                    );
 
-                return d;
+                    return d;
+                }
             }
-        });
+        );
 
         const l = e => {
-            const r = document.querySelectorAll(
-                `script[src="${e}"]`
-            );
+            const r =
+                document.querySelectorAll(
+                    `script[src="${e}"]`
+                );
 
             for (let e of Array.from(r)) {
                 e.remove();
@@ -234,7 +261,8 @@ if (window.sdkLoaderWasInited) {
         const v = 3;
 
         const g = (n, i) => {
-            const d = document.createElement("script");
+            const d =
+                document.createElement("script");
 
             d.src = n;
 
@@ -244,26 +272,31 @@ if (window.sdkLoaderWasInited) {
                 t = !0;
 
                 if (a) {
-                    null == (n = window.YaGames)
-                        ? void 0
-                        : n.init(o)
-                            .then(r => {
-                                e(r);
-                            })
-                            .catch(e => {
-                                c(
-                                    "Error while init sdk",
-                                    {
-                                        error: e
-                                    }
-                                );
+                    null == (n = window.YaGames) ||
+                    n.init(o)
+                        .then(r => {
+                            e(r);
+                        })
+                        .catch(e => {
+                            c(
+                                "Error while init sdk",
+                                {
+                                    error: e
+                                }
+                            );
 
-                                r(e);
-                            });
+                            r(e);
+                        });
                 }
             };
 
-            d.onerror = (e, o, t, d, m) => {
+            d.onerror = (
+                e,
+                o,
+                t,
+                d,
+                m
+            ) => {
                 l(n);
 
                 if (i > 0) {
@@ -293,11 +326,15 @@ if (window.sdkLoaderWasInited) {
         };
 
         const p = (e, o = "") => {
-            if (e && (m.test(e) || u.test(e))) {
-                const r = new URL(
-                    e,
-                    location.origin
-                );
+            if (
+                e &&
+                (
+                    m.test(e) ||
+                    u.test(e)
+                )
+            ) {
+                const r =
+                    new URL(e, location.origin);
 
                 if (o) {
                     r.searchParams.set(
@@ -310,6 +347,7 @@ if (window.sdkLoaderWasInited) {
                     r.toString(),
                     v
                 );
+
             } else {
                 s = !0;
 
@@ -327,31 +365,39 @@ if (window.sdkLoaderWasInited) {
             ).get("sdk");
 
         if (h) {
+
             p(h);
+
         } else {
+
             (async () =>
                 new Promise((e, r) => {
+
                     const o =
                         `${Date.now()}-${Math.random()}`;
 
-                    const n = setTimeout(() => {
-                        r(
-                            new Error(
-                                "Get external iframe timeout"
-                            )
-                        );
-                    }, 500);
+                    const n =
+                        setTimeout(() => {
+                            r(
+                                new Error(
+                                    "Get external iframe timeout"
+                                )
+                            );
+                        }, 500);
 
                     window.addEventListener(
                         "message",
+
                         function r(a) {
-                            const t = function (e) {
-                                try {
-                                    return JSON.parse(e);
-                                } catch (e) {
-                                    return null;
-                                }
-                            }(a.data);
+
+                            const t =
+                                function (e) {
+                                    try {
+                                        return JSON.parse(e);
+                                    } catch (e) {
+                                        return null;
+                                    }
+                                }(a.data);
 
                             if (
                                 t &&
@@ -371,21 +417,28 @@ if (window.sdkLoaderWasInited) {
 
                     window.parent.postMessage(
                         JSON.stringify({
-                            source: "YandexGamesSDK",
+                            source:
+                                "YandexGamesSDK",
+
                             actionName:
                                 "GET_IFRAME_ORIGIN_SRC",
+
                             channel:
                                 "EARLY_SDK_EVENT",
+
                             messageId: o
                         }),
+
                         "*"
                     );
                 })
+
             )()
+
                 .then(e => {
+
                     const r = new URL(e);
                     const o = r.searchParams;
-
                     const n = o.get("sdk");
                     const a = o.get("dvh") || "";
 
@@ -400,7 +453,9 @@ if (window.sdkLoaderWasInited) {
 
                     p(n, a);
                 })
+
                 .catch(e => {
+
                     c(
                         "Error while get iframe src",
                         {
@@ -417,6 +472,7 @@ if (window.sdkLoaderWasInited) {
     }
 
     YaGamesLoader = r;
+
 })();
 
 //# sourceMappingURL=https://s3.mds.yandex.net/games-static-private/source-maps/_/sdk/sdk-loader/sdk.js.map
